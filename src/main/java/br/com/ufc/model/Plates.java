@@ -1,28 +1,37 @@
 package br.com.ufc.model;
 
-import javax.persistence.CascadeType;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
-public class Plates {
+public class Plates{
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Cascade({CascadeType.DELETE, CascadeType.SAVE_UPDATE})
 	private Long plateId;
 	private String plateName;
 	private String plateImage;
 	private double price;
+	private String category;
 	
-	public Plates(Long plateId, String plateName, String plateImage, double price) {
+	@ManyToMany(mappedBy = "plates")
+	private List<Orders> orders;
+	
+	public Plates(Long plateId, String plateName, String plateImage, double price, String category) {
 		super();
 		this.plateId = plateId;
 		this.plateName = plateName;
 		this.plateImage = plateImage;
 		this.price = price;
+		this.category = category;
 	}
 	
 	public Plates() {}
@@ -57,6 +66,22 @@ public class Plates {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public List<Orders> getOrders() {
+		return this.orders;
+	}
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
 	}
 	
 }

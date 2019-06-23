@@ -1,39 +1,54 @@
 package br.com.ufc.model;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class Orders {
+public class Orders{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
+	@Cascade({CascadeType.DELETE, CascadeType.SAVE_UPDATE})
 	private Long orderId;
 	
 	@ManyToOne
-	@JoinColumn
-	private Long userId;
+	private Users user;
+	
 	private double total;
+	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
-	public Orders(Long orderId, Long userId, double total, Date orderDate) {
-		super();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "Cart",
+			joinColumns = @JoinColumn(
+					name = "orderId",
+					referencedColumnName = "orderId"),
+			inverseJoinColumns = @JoinColumn(
+					name = "plateId",
+					referencedColumnName = "plateId"))
+	private List<Plates> plates;
+	
+	public Orders(Long orderId, Users user, double total, Date orderDate) {
 		this.orderId = orderId;
-		this.userId = userId;
+		this.user = user;
 		this.total = total;
 		this.orderDate = orderDate;
 	}
@@ -48,15 +63,20 @@ public class Orders {
 		this.orderId = orderId;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public Users getUser() {
+		return user;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public double getTotal() {
+		double sum = 0;
+		for(Plates p : this.plates) {
+			sum += p.getPrice();
+		}
+		this.total = sum;
 		return total;
 	}
 
@@ -70,6 +90,14 @@ public class Orders {
 
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
+	}
+
+	public List<Plates> getPlates() {
+		return plates;
+	}
+
+	public void setPlates(List<Plates> plates) {
+		this.plates = plates;
 	}
 	
 }

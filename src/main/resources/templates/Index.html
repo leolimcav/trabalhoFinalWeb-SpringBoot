@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Insert title here</title>
-  
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-</head>
-<body>
-  <div>
-    <header>
-      <h1>Header</h1>
-      <nav>
-        <ul>
-          <li>Nav</li>
-          <li>Bar</li>
-          <li>On</li>
-          <li>Header</li>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+
+    <!--Import Google Icon Font-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+  <body>
+    <div>
+      <header>
+        <nav>
+          <div class="nav-wrapper">
+            <a href="/Index.html" class="brand-logo">Logo</a>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"
+              ><i class="material-icons">menu</i></a
+            >
+            <ul class="right hide-on-med-and-down">
+              <li>
+                <a><i class="material-icons left">home</i>Home</a>
+              </li>
+              <li><a>Bar</a></li>
+              <li><a>On</a></li>
+              <li><a class="waves-effect waves-light btn">Login</a></li>
+            </ul>
+          </div>
+        </nav>
+        <ul id="nav-mobile" class="sidenav">
+          <li>
+            <a><i class="material-icons left">home</i>Home</a>
+          </li>
+          <li><a>Bar</a></li>
+          <li><a>On</a></li>
+          <li><a class="waves-effect waves-light btn">Login</a></li>
         </ul>
-      </nav>
-  	</header>
-  	<main>
-      <h2>Main Content</h2>
-  	</main>
-  	<footer>
-      <h4>Footer</h4>
-    </footer>
-  </div>
-  
-  <!-- CDN Jquery -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</body>
+      </header>
+      <main class="container">
+        <h2>INDEX</h2>
+      </main>
+      <footer>
+        <h4>Footer</h4>
+      </footer>
+    </div>
+    <!-- CDN Jquery -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/sidenavInit.js"></script>
+  </body>
 </html>

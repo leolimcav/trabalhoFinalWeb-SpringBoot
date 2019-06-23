@@ -1,29 +1,33 @@
 package br.com.ufc.model;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-public class Users {
-	
+public class Users{
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Cascade({CascadeType.DELETE, CascadeType.SAVE_UPDATE})
 	private Long userId;
 	
 	private String fullName;
+	private String username;
+	private String password;
+	private String email;
+	private String cpf;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
@@ -35,18 +39,22 @@ public class Users {
     private String state;
     private String zipCode;
     private String country;
-    private String email;
-    private String password;
     
-    @OneToOne
-    @JoinColumn
-    private Long role;
+    @ManyToOne
+    private Roles role;
+    
+    @OneToMany
+    private List<Orders> orders;
 
-	public Users(Long userId, String fullName, Date birthday, int number, String street, String city, String state,
-			String zipCode, String country, String email, String password, Long role) {
+	public Users(Long userId, String fullName, String username, String password, String email, String cpf,
+			Date birthday, int number, String street, String city, String state, String zipCode, String country) {
 		super();
 		this.userId = userId;
 		this.fullName = fullName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.cpf = cpf;
 		this.birthday = birthday;
 		this.number = number;
 		this.street = street;
@@ -54,11 +62,8 @@ public class Users {
 		this.state = state;
 		this.zipCode = zipCode;
 		this.country = country;
-		this.email = email;
-		this.password = password;
-		this.role = role;
 	}
-	
+
 	public Users() {}
 
 	public Long getUserId() {
@@ -141,6 +146,14 @@ public class Users {
 		this.email = email;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -149,12 +162,28 @@ public class Users {
 		this.password = password;
 	}
 
-	public Long getRole() {
+	public Roles getRole() {
 		return role;
 	}
 
-	public void setRole(Long role) {
+	public void setRole(Roles role) {
 		this.role = role;
+	}
+
+	public List<Orders> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 	
 }

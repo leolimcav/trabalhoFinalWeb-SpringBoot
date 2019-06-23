@@ -1,34 +1,27 @@
 package br.com.ufc.model;
 
-import javax.persistence.CascadeType;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-public class Roles {
+public class Roles implements GrantedAuthority{
 	
 	@Id
-	@OneToOne(mappedBy = "role", cascade = CascadeType.ALL)
-	private Long roleId;
-	
 	private String roleName;
 	
-	public Roles(Long roleId, String roleName) {
-		super();
-		this.roleId = roleId;
+	@OneToMany
+	private List<Users> user;
+	
+	public Roles(String roleName) {
 		this.roleName = roleName;
 	}
 
 	public Roles() {}
-
-	public Long getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
 
 	public String getRoleName() {
 		return roleName;
@@ -36,6 +29,19 @@ public class Roles {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public List<Users> getUser() {
+		return user;
+	}
+
+	public void setUser(List<Users> user) {
+		this.user = user;
+	}
+
+	@Override
+	public String getAuthority() {
+		return this.getRoleName();
 	}
 	
 }
