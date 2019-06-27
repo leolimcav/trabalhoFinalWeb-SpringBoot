@@ -78,51 +78,48 @@
               ENJOY OUR DELICIOUS FLAVORS!
             </h4>
             <h5 class="header-subtext center-align">Real good food.</h5>
-            <a href="/plates/gallery"><button class="btn btn-large btn-header center-align waves-effect">MENU</button></a>
+            <a href="/plates/gallery"><button class="btn btn-header btn-large center-align waves-effect">MENU</button></a>
           </div>
         </div>
       </div>
     </header>
     <main>
-      <table class="highlight centered responsive-table">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Full Name</th>
-              <th>Login</th>
-              <th>Password</th>
-              <th>Email</th>
-              <th>CPF</th>
-              <th>Birthday</th>
-              <th>Number</th>
-              <th>Street</th>
-              <th>City</th>
-              <th>State</th>
-              <th>ZipCode</th>
-              <th>Country</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each = "users : ${userList}">
-              <td th:text="${users.userId}"></td>
-              <td th:text="${users.fullName}"></td>
-              <td th:text="${users.login}"></td>
-              <td th:text="${users.password}"></td>
-              <td th:text="${users.email}"></td>
-              <td th:text="${users.cpf}"></td>
-              <td th:text="${users.birthday}"></td>
-              <td th:text="${users.number}"></td>
-              <td th:text="${users.street}"></td>
-              <td th:text="${users.city}"></td>
-              <td th:text="${users.state}"></td>
-              <td th:text="${users.zipCode}"></td>
-              <td th:text="${users.country}"></td>
-              <td><a th:href="@{/users/update/{userId}(userId = ${users.userId})}">Update</a></td>
-              <td><a th:href="@{/users/delete/{userId}(userId = ${users.userId})}">Delete</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </main>
+      <form
+        th:action="@{/plates/create}"
+        th:object="${plate}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <input type="hidden" th:field="*{plateId}" />
+        <div>
+          <input
+            type="text"
+            id="plateName"
+            name="plateName"
+            th:field="*{plateName}"
+          />
+          <label for="plateName">Plate Name</label>
+        </div>
+        <div>
+          <input type="file" id="plateImage" name="plateImage" />
+          <label for="plateImage">Plate Image</label>
+        </div>
+        <div>
+          <input type="text" id="price" name="price" th:field="*{price}" />
+          <label for="price">Price</label>
+        </div>
+        <div>
+          <input
+            type="text"
+            id="category"
+            name="category"
+            th:field="*{category}"
+          />
+          <label for="category">Category</label>
+        </div>
+        <button type="submit" class="btn">Confirm</button>
+      </form>
+    </main>
     <footer></footer>
 
     <!-- CDN JQuery -->

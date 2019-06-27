@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="/css/settings.css" />
   </head>
   <body class="#ffffff white">
-<header class="#212121 grey darken-4 header-container">
+    <header class="#212121 grey darken-4 header-container">
       <ul sec:authorize="isAuthenticated()" id="user-dropdown" class="dropdown-content hide-on-med-and-down">
         <li><a th:href="@{/users/orders/{userId}(userId = ${session.user.userId})}">My Orders</a></li>
         <li><a th:href="@{/users/update/{userId}(userId = ${session.user.userId})}">My Account</a></li>
@@ -62,7 +62,7 @@
           <li><a href="/plates/gallery">MENU</a></li>
           <li sec:authorize="isAuthenticated()"><a href="/cart/view">SHOPPING CART</a></li>
           <li sec:authorize="isAuthenticated()"><a th:href="@{/users/orders/{userId}(userId = ${session.user.userId})}">My Orders</a></li>
-          <li sec:authorize="isAuthenticated()"><a th:href="@{/users/update/{userId}(userId = ${session.user.userId})}">My Account</a></li>
+          <li sec:authorize="isAuthenticated()" class="active"><a th:href="@{/users/update/{userId}(userId = ${session.user.userId})}">My Account</a></li>
           <li sec:authorize="!isAuthenticated()"><a href="/login">SIGN IN</a></li>
           <li sec:authorize="!isAuthenticated()"><a href="/register">SIGN UP</a></li>
         </ul>
@@ -83,48 +83,103 @@
         </div>
       </div>
     </header>
-    <main>
-      <table class="highlight centered responsive-table">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Full Name</th>
-              <th>Login</th>
-              <th>Password</th>
-              <th>Email</th>
-              <th>CPF</th>
-              <th>Birthday</th>
-              <th>Number</th>
-              <th>Street</th>
-              <th>City</th>
-              <th>State</th>
-              <th>ZipCode</th>
-              <th>Country</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each = "users : ${userList}">
-              <td th:text="${users.userId}"></td>
-              <td th:text="${users.fullName}"></td>
-              <td th:text="${users.login}"></td>
-              <td th:text="${users.password}"></td>
-              <td th:text="${users.email}"></td>
-              <td th:text="${users.cpf}"></td>
-              <td th:text="${users.birthday}"></td>
-              <td th:text="${users.number}"></td>
-              <td th:text="${users.street}"></td>
-              <td th:text="${users.city}"></td>
-              <td th:text="${users.state}"></td>
-              <td th:text="${users.zipCode}"></td>
-              <td th:text="${users.country}"></td>
-              <td><a th:href="@{/users/update/{userId}(userId = ${users.userId})}">Update</a></td>
-              <td><a th:href="@{/users/delete/{userId}(userId = ${users.userId})}">Delete</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </main>
+    <main class="container">
+      <form th:action="@{/register}" method="POST" th:object="${user}">
+        <div class="container section">
+          <h5>Personal Information</h5>
+          <div class="divider black"></div>
+          <input type="hidden" name="userId" th:field="*{userId}" />
+          <div class="input-field col s6 off">
+            <input
+              type="text"
+              id="full_name"
+              name="fullName"
+              class="validate"
+              th:field="*{fullName}"
+            />
+            <label for="full_name">Full Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input
+              type="text"
+              id="username"
+              name="login"
+              class="validate"
+              th:field="*{login}"
+            />
+            <label for="username">Username</label>
+          </div>
+          <div class="input-field col s6">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              class="validate"
+            />
+            <label for="password">Password</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="email" id="email" name="email" class="validate" th:field="*{email}" />
+            <label for="email" data-error="wrong" data-success="right"
+              >Email</label
+            >
+          </div>
+          <div class="input-field col s12">
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              class="validate"
+              data-length="11"
+              th:field="*{cpf}"
+            />
+            <label for="cpf" data-error="wrong" data-success="right"
+              >CPF</label
+            >
+          </div>
+          <div class="input-field col s12">
+            <input
+              type="text"
+              id="birhtday"
+              name="birthday"
+              class="datepicker validate"
+              th:field="*{birthday}"
+            />
+            <label for="birthday">Birthday</label>
+          </div>
+        </div>
+        <div class="container section">
+          <h5>Address Information</h5>
+          <div class="divider black"></div>
+          <div class="input-field col s12">
+            <input type="text" id="number" name="number" class="validate" th:field="*{number}"/>
+            <label for="number">Number</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="street" name="street" class="validate" th:field="*{street}"/>
+            <label for="number">Street</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="city" name="city" class="validate" th:field="*{city}"/>
+            <label for="number">City</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="state" name="state" class="validate" th:field="*{state}"/>
+            <label for="number">State</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="zipCode" name="zipCode" class="validate" th:field="*{zipCode}"/>
+            <label for="number">ZipCode</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="country" name="country" class="validate" th:field="*{country}" />
+            <label for="number">Country</label>
+          </div>
+        </div>
+        <button class="btn btn-large orange" type="submit">Save Changes</button>
+      </form>
+    </main>
     <footer></footer>
-
     <!-- CDN JQuery -->
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -136,5 +191,6 @@
     <script src="/js/sidenavInit.js"></script>
     <script src="/js/usernav-dropdown.js"></script>
     <script src="/js/cartdropdown.js"></script>
+    <script src="/js/date.js"></script>
   </body>
 </html>

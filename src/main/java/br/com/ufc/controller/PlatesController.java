@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.ufc.model.Plates;
@@ -28,24 +29,24 @@ public class PlatesController {
 		return mv;
 	}
 	
-	@GetMapping("/create")
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView createPlateForm() {
 		ModelAndView mv = new ModelAndView("PlateForm");
 		return mv;
 	}
 	
-	@PostMapping("/create")
-	public ModelAndView createPlate(Plates plate) {
-		plateService.create(plate);
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public ModelAndView createPlate(Plates plate, @RequestParam(value="plateImage") MultipartFile image) {
+		plateService.create(plate, image);
 		ModelAndView mv = new ModelAndView("redirect:/plates/gallery");
 		return mv;
 	}
 	
 	@RequestMapping("/update/{plateId}")
 	public ModelAndView updatePlate(@PathVariable Long plateId) {
-		Plates plate = plateService.read(plateId);
-		ModelAndView mv = new ModelAndView("PlateForm");
-		mv.addObject("plate", plate);
+		Plates plates = plateService.read(plateId);
+		ModelAndView mv = new ModelAndView("PlateUpdate");
+		mv.addObject("plate", plates);
 		return mv;
 	}
 	
@@ -53,6 +54,12 @@ public class PlatesController {
 	public ModelAndView deletePlate(@PathVariable Long plateId) {
 		plateService.delete(plateId);
 		ModelAndView mv = new ModelAndView("redirect:/plates/gallery");
+		return mv;
+	}
+	
+	@RequestMapping("/error")
+	public ModelAndView errorHandler() {
+		ModelAndView mv = new ModelAndView("Error");
 		return mv;
 	}
 }

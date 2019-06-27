@@ -17,16 +17,18 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Orders{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Cascade({CascadeType.DELETE, CascadeType.SAVE_UPDATE})
+	@Cascade(CascadeType.ALL)
 	private Long orderId;
 	
-	@ManyToOne
+	@ManyToOne()
 	private Users user;
 	
 	private double total;
@@ -35,7 +37,7 @@ public class Orders{
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "Cart",
 			joinColumns = @JoinColumn(

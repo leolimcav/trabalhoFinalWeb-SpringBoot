@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Insert title here</title>
+    <title>LA SAVEUR</title>
 
     <!--Import Google Icon Font-->
     <link
@@ -14,16 +14,162 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css?family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/settings.css" />
   </head>
-  <body>
-    <div>
-      <header>
-        <nav></nav>
-      </header>
-      <main><h1>USER FORM</h1></main>
-      <footer></footer>
-    </div>
-
+  <body class="#ffffff white">
+    <header class="#212121 grey darken-4 header-container">
+      <ul sec:authorize="isAuthenticated()" id="user-dropdown" class="dropdown-content hide-on-med-and-down">
+        <li><a th:href="@{/users/orders/{userId}(userId = ${session.user.userId})}">My Orders</a></li>
+        <li><a th:href="@{/users/update/{userId}(userId = ${session.user.userId})}">My Account</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/users/list}">List Users</a></li>
+        <li><a th:href="@{/logout}">Logout</a></li>
+      </ul>
+      <div id="cart-dropdown" class="dropdown-content hide-on-med-and-down nav-dropdown">
+        <ul sec:authorize="isAuthenticated()"  th:each="plates: ${session.cart}" >
+          <li class="cart-header"><div th:inline="text">Total: $[[${session.total}]]</div></li>
+          <li>
+          <img class="circle left" width="75" height="75" th:src="@{'/images/'+${plates.plateName}+.jpg}"/>
+          <span class="cart-items" th:inline="text">[[${plates.plateName}]]</span>
+          </li>
+          <div>
+            <a href="/cart/view" class="button">CHECKOUT</a>
+          </div>
+        </ul>
+      </div>
+      <!-- MAIN NAVBAR -->
+      <nav class="#212121 grey darken-4 nav-container">
+        <div class="nav-wrapper">
+          <a href="/" class="brand-logo logo">LA SAVEUR</a>
+          <a class="sidenav-trigger" data-target="mobile-nav" href="#"><i class="material-icons">menu</i></a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/">HOME</a></li>
+            <li><a href="/plates/gallery">MENU</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/cart/view" id="cartdropdown-trigger" data-target="cart-dropdown"><i class="material-icons left">shopping_cart</i>SHOPPING CART <span class="cart-badge" th:inline="text">[[${session.qty}]]</span></a></li>
+            <li sec:authorize="isAuthenticated()"><a id="userdropdown-trigger" data-target="user-dropdown" th:text="${session.user.fullName}"><i class="material-icons right">arrow_drop_down</i></a></li>
+            <li sec:authorize="!isAuthenticated()"><a href="/login">SIGN IN</a></li>
+            <li sec:authorize="!isAuthenticated()"><a href="/register">SIGN UP</a></li>
+          </ul>
+        </div>
+      </nav>
+      <!-- SIDENAV UL -->
+      <div id="mobile-nav" class="sidenav">
+        <ul >
+          <li><a href="/">HOME</a></li>
+          <li><a href="/plates/gallery">MENU</a></li>
+          <li sec:authorize="isAuthenticated()"><a href="/cart/view">SHOPPING CART</a></li>
+          <li sec:authorize="isAuthenticated()"><a th:href="@{/users/orders/{userId}(userId = ${session.user.userId})}">My Orders</a></li>
+          <li sec:authorize="isAuthenticated()"><a th:href="@{/users/update/{userId}(userId = ${session.user.userId})}">My Account</a></li>
+          <li sec:authorize="!isAuthenticated()"><a href="/login">SIGN IN</a></li>
+          <li sec:authorize="!isAuthenticated()"><a href="/register">SIGN UP</a></li>
+        </ul>
+      </div>
+      <div class="row-container">
+        <div class="row custom-row">
+          <div class="col s12 m6 l6">
+            <h1 class="header-title center-align">LA SAVEUR</h1>
+            <h3 class="header-subtitle center-align">delivery</h3>
+          </div>
+          <div class="col s12 m6 l6 right">
+            <h4 class="header-text center-align">
+              ENJOY OUR DELICIOUS FLAVORS!
+            </h4>
+            <h5 class="header-subtext center-align">Real good food.</h5>
+            <a href="/plates/gallery"><button class="btn btn-large btn-header center-align waves-effect">MENU</button></a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <form action="/register" method="POST">
+        <div class="container section">
+          <h5>Personal Information</h5>
+          <div class="divider black"></div>
+          <div class="input-field col s6 off">
+            <input
+              type="text"
+              id="full_name"
+              name="fullName"
+              class="validate"
+            />
+            <label for="full_name">Full Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input type="text" id="login" name="login" class="validate" />
+            <label for="login">Username</label>
+          </div>
+          <div class="input-field col s6">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              class="validate"
+            />
+            <label for="password">Password</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="email" id="email" name="email" class="validate" />
+            <label for="email" data-error="wrong" data-success="right"
+              >Email</label
+            >
+          </div>
+          <div class="input-field col s12">
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              class="validate"
+              data-length="11"
+            />
+            <label for="cpf" data-error="wrong" data-success="right"
+              >CPF</label
+            >
+          </div>
+          <div class="input-field col s12">
+            <input
+              type="text"
+              id="birhtday"
+              name="birthday"
+              class="datepicker validate"
+            />
+            <label for="birthday">Birthday</label>
+          </div>
+        </div>
+        <div class="container section">
+          <h5>Address Information</h5>
+          <div class="divider black"></div>
+          <div class="input-field col s12">
+            <input type="text" id="number" name="number" class="validate" />
+            <label for="number">Number</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="street" name="street" class="validate" />
+            <label for="number">Street</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="city" name="city" class="validate" />
+            <label for="number">City</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="state" name="state" class="validate" />
+            <label for="number">State</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="zipCode" name="zipCode" class="validate" />
+            <label for="number">ZipCode</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="country" name="country" class="validate" />
+            <label for="number">Country</label>
+          </div>
+        </div>
+        <button class="btn btn-large" type="submit">Sign Up</button>
+      </form>
+    </main>
+    <footer></footer>
     <!-- CDN JQuery -->
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -32,5 +178,9 @@
     ></script>
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/sidenavInit.js"></script>
+    <script src="/js/usernav-dropdown.js"></script>
+    <script src="/js/cartdropdown.js"></script>
+    <script src="/js/date.js"></script>
   </body>
 </html>

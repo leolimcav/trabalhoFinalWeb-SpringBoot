@@ -3,9 +3,14 @@ package br.com.ufc.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
@@ -14,7 +19,8 @@ public class Roles implements GrantedAuthority{
 	@Id
 	private String roleName;
 	
-	@OneToMany
+	@ManyToMany(mappedBy = "role", fetch = FetchType.EAGER)
+	@Cascade(CascadeType.ALL)
 	private List<Users> user;
 	
 	public Roles(String roleName) {

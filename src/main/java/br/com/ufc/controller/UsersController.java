@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,32 +24,20 @@ public class UsersController {
 	public ModelAndView listAllUsers(){
 		List<Users> userList = userService.fetchAllUsers();
 		ModelAndView mv = new ModelAndView("ListUsers");
-		mv.addObject("users", userList);
-		return mv;
-	}
-	
-	@GetMapping("/create")
-	public ModelAndView createUserForm() {
-		ModelAndView mv = new ModelAndView("UserForm");
-		return mv;
-	}
-	
-	@PostMapping("/create")
-	public ModelAndView createUser(Users user) {
-		userService.create(user);
-		ModelAndView mv = new ModelAndView("Index");
+		System.out.println(userList);
+		mv.addObject("Users", userList);
 		return mv;
 	}
 	
 	@RequestMapping("/update/{userId}")
-	public ModelAndView updateUser(@PathVariable Long userId) {
+	public ModelAndView updateUserForm(@PathVariable Long userId) {
 		Users user = userService.read(userId);
-		ModelAndView mv = new ModelAndView("UserForm");
+		ModelAndView mv = new ModelAndView("EditUserForm");
 		mv.addObject("user", user);
 		return mv;
 	}
 	
-	@RequestMapping("/delete/{userId}")
+	@DeleteMapping("/delete/{userId}")
 	public ModelAndView deleteUser(@PathVariable Long userId) {
 		userService.delete(userId);
 		ModelAndView mv = new ModelAndView("redirect:/users/list");
@@ -61,7 +48,7 @@ public class UsersController {
 	public ModelAndView listUserOrders(@PathVariable Long userId) {
 		List<Orders> userOrders = userService.fetchAllUserOrders(userId);
 		ModelAndView mv = new ModelAndView("ListUserOrders");
-		mv.addObject("userOrders", userOrders);
+//		mv.addObject("userOrders", userOrders);
 		return mv;
 	}
 	

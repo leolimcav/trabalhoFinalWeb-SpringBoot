@@ -3,14 +3,17 @@ package br.com.ufc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.com.ufc.components.EmailServiceImpl;
 import br.com.ufc.model.Orders;
+import br.com.ufc.model.Users;
 import br.com.ufc.service.OrdersService;
 
 @Controller
@@ -28,16 +31,12 @@ public class OrdersController {
 		return mv;
 	}
 	
-	@GetMapping("/create")
-	public ModelAndView createOrderForm() {
-		ModelAndView mv = new ModelAndView("OrderForm");
-		return mv;
-	}
-	
 	@PostMapping("/create")
 	public ModelAndView createOrder(Orders order) {
 		orderService.create(order);
-		ModelAndView mv = new ModelAndView("redirect:/orders/list");
+		
+		ModelAndView mv = new ModelAndView("redirect:/");
+		
 		return mv;
 	}
 	
@@ -47,7 +46,7 @@ public class OrdersController {
 		ModelAndView mv = new ModelAndView("OrderForm");
 		mv.addObject("order", order);
 		return mv;
-	}
+	}	
 	
 	@RequestMapping("/delete/{orderId}")
 	public ModelAndView deleteOrder(@PathVariable Long orderId) {
